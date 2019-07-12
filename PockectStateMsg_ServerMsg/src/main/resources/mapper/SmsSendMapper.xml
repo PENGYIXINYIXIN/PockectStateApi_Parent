@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.message.pockectstatemsg_servermsg.dao.SmsSendMapper">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.msg.SmsSend">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="ipaddr" jdbcType="VARCHAR" property="ipaddr" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, phone, content, flag, ipaddr, ctime
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_smssend order by ctime desc
+  </select>
+  <select id="selectByMsg" resultMap="BaseResultMap">
+    select * from t_smssend where phone=#{phone} and content=#{msg}
+  </select>
+
+  <insert id="insert" parameterType="com.pockectstate.entity.msg.SmsSend" useGeneratedKeys="true" keyProperty="id">
+    insert into t_smssend (phone, content,flag, ipaddr,ctime)
+    values ( #{phone,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+      #{flag,jdbcType=INTEGER}, #{ipaddr,jdbcType=VARCHAR},now())
+  </insert>
+
+</mapper>

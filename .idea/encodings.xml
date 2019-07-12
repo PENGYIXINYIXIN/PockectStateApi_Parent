@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_AppApi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_Common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_Entity" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_Eureka" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_ServerUser" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateApi_ServiceLogin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PockectStateMsg_ServerMsg" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

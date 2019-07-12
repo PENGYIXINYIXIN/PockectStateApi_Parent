@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.message.pockectstatemsg_servermsg.dao.SmsRestsetMapper">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.msg.SmsRestset">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="sid" jdbcType="BIGINT" property="sid" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sid, flag, ctime
+  </sql>
+
+  <insert id="insert" parameterType="com.pockectstate.entity.msg.SmsRestset">
+    insert into t_smsrestset (sid, flag,ctime)
+    values ( #{sid,jdbcType=BIGINT}, #{flag,jdbcType=INTEGER},now())
+  </insert>
+
+</mapper>

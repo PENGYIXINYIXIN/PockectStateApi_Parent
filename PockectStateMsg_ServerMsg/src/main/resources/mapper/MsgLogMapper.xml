@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.message.pockectstatemsg_servermsg.dao.MsgLogMapper">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.msg.MsgLog">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, type, content, ctime
+  </sql>
+
+  <insert id="insert" parameterType="com.pockectstate.entity.msg.MsgLog">
+    insert into t_msglog (type, content,ctime)
+    values (#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, now())
+  </insert>
+
+</mapper>
