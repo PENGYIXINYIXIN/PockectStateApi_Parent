@@ -3,7 +3,7 @@ package com.pockectstate.api.common.vo;
 import com.pockectstate.api.common.config.ResultJson_Config;
 
 /**
- *@Author feri
+ *@Author yixi
  *@Date Created in 2019/7/9 15:44
  */
 

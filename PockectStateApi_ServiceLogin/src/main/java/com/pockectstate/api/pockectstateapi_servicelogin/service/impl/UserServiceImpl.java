@@ -30,7 +30,7 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Autowired()
     private  UserDao userDao;
     @Autowired
     private JedisUtil jedisUtil;
@@ -39,29 +39,54 @@ public class UserServiceImpl implements UserService {
     //登陆
     @Override
     public R login(LoginDto loginDto) {
-        //
-        //验证手机号是否存在
-        User user = userDao.selectByPhone(loginDto.getPhone());
-        //验证密码是否正确
-        if(Objects.equals(user.getPassword(), EncryptionUtil.AESEnc(Key_Config.PASSKEY,loginDto.getPassword()))){
-            //登陆成功之后生成令牌 存储到redis里面
-            JWTToken jwtToken = new JWTToken();
-            jwtToken.setDevice(loginDto.getDevice());
-            jwtToken.setDeviceMac(loginDto.getDeviceMac());
-            jwtToken.setPhone(loginDto.getPhone());
-            jwtToken.setId(user.getId());
-            jwtToken.setNo(idGenerator.nextId()+"");
-            String jsonToken = JSON.toJSONString(jwtToken);
-            String token =  Jwt_Util.createJWT(idGenerator.nextId()+"", Jwt_Config.JETTOKENTIME,jsonToken);
-            //存储到redis里面
-            //当前的令牌  值为对应的JwtToken的JSON对象
-            jedisUtil.setExpire(RedisKey_Config.JWTTOKEN_TOKEN+token,jsonToken,Jwt_Config.JETTOKENTIME*60);
-            //存储的是当前的设备 和账号信息 值为对应的令牌
-            String dk = DeviceKeyUtil.createKey(jwtToken);
-            jedisUtil.setExpire(RedisKey_Config.JWTTOKEN_DEVICE+dk,token,Jwt_Config.JETTOKENTIME*60);
-            return R.setOK("ok",token);
+        //验证当前账号是否被冻结
+        if(jedisUtil.exists(RedisKey_Config.LOGINGFORCE+loginDto.getPhone())){
+            //被冻结
+            return R.setERROR("账号已经被冻结，剩余时间："+getTTL(RedisKey_Config.LOGINGFORCE+loginDto.getPhone()),null);
+        }else {
+            boolean login = false;
+            //验证手机号是否存在
+            User user = userDao.selectByPhone(loginDto.getPhone());
+            if(user!=null){
+                //验证密码是否正确
+                if(Objects.equals(user.getPassword(), EncryptionUtil.AESEnc(Key_Config.PASSKEY,loginDto.getPassword()))){
+                    //登陆成功之后生成令牌 存储到redis里面
+                    JWTToken jwtToken = new JWTToken();
+                    jwtToken.setDevice(loginDto.getDevice());
+                    jwtToken.setDeviceMac(loginDto.getDeviceMac());
+                    jwtToken.setPhone(loginDto.getPhone());
+                    jwtToken.setId(user.getId());
+                    jwtToken.setNo(idGenerator.nextId()+"");
+                    String jsonToken = JSON.toJSONString(jwtToken);
+                    String token =  Jwt_Util.createJWT(idGenerator.nextId()+"", Jwt_Config.JETTOKENTIME,jsonToken);
+                    //存储到redis里面
+                    //当前的令牌  值为对应的JwtToken的JSON对象
+                    jedisUtil.setExpire(RedisKey_Config.JWTTOKEN_TOKEN+token,jsonToken,Jwt_Config.JETTOKENTIME*60);
+                    //存储的是当前的设备 和账号信息 值为对应的令牌
+                    String dk = DeviceKeyUtil.createKey(jwtToken);
+                    jedisUtil.setExpire(RedisKey_Config.JWTTOKEN_DEVICE+dk,token,Jwt_Config.JETTOKENTIME*60);
+                    login=true;
+                    return R.setOK("ok",token);
+                }
+            }
+            //登录失败  redis里面次数加一
+            if(!login) {
+                String k = RedisKey_Config.LOGINGERROR + loginDto.getPhone();
+                if (jedisUtil.exists(k)) {
+                    //取值
+                    int c = Integer.parseInt(jedisUtil.get(k));
+                    if(c >= 2){
+                        jedisUtil.setExpire(RedisKey_Config.LOGINGFORCE+loginDto.getPhone(),loginDto.getPhone(),15*60);
+                        return R.setERROR("您已经连续输错三次 账号被冻结15分钟",null);
+                    }
+                    jedisUtil.setExpire(k,c+1+"",(int)jedisUtil.ttl(k));
+                } else {
+                    //第一次失败
+                jedisUtil.setExpire(k, 1 + "", 300);
+            }
+            }
+            return R.setERROR("账号或者手机号码不正确",null);
         }
-        return R.setERROR("账号或者手机号码不正确",null);
     }
 
     @Override
@@ -81,22 +106,27 @@ public class UserServiceImpl implements UserService {
     //找回密码
     @Override
     public R goback(UserDto userDto) {
-        int j = userDao.update(userDto.getPhone(), EncryptionUtil.AESEnc(Jwt_Config.JWTKEY, userDto.getPsw()));
-        if(j>0){
-            //修改密码成功
-            Set<String> keys = jedisUtil.keys(RedisKey_Config.JWTTOKEN_DEVICE + userDto.getPhone() + "_*");
-            //集合变成数组
-            String[] arr = new String[keys.size()];
-            int i = 0;
-            for (String k:
-                 keys) {
-                arr[i]=k;
-                i++;
+        if(jedisUtil.exists(RedisKey_Config.LOGINGFORCE+userDto.getPhone())){
+            int j = userDao.update(userDto.getPhone(), EncryptionUtil.AESEnc(Jwt_Config.JWTKEY, userDto.getPsw()));
+            if(j>0){
+                //修改密码成功
+                Set<String> keys = jedisUtil.keys(RedisKey_Config.JWTTOKEN_DEVICE + userDto.getPhone() + "_*");
+                //集合变成数组
+                String[] arr = new String[keys.size()];
+                int i = 0;
+                for (String k:
+                        keys) {
+                    arr[i]=k;
+                    i++;
+                }
+                jedisUtil.del(arr);
+                return R.setOK("密码找回成功，请妥善保管",null);
             }
-            jedisUtil.del(arr);
-            return R.setOK("密码找回成功，请妥善保管",null);
+            return R.setERROR("密码找回失败，请稍后再试",null);
+        }else {
+            return R.setERROR("账号冻结中，剩余"+getTTL(RedisKey_Config.LOGINGFORCE+userDto.getPhone()),null);
         }
-        return R.setERROR("密码找回失败，请稍后再试",null);
+
     }
 
     /*校验令牌的有效性
@@ -128,5 +158,8 @@ public class UserServiceImpl implements UserService {
             }
         }
         return R.setERROR("登陆失效请重新登陆",null);
+    }
+    private String getTTL(String key){
+        return jedisUtil.ttl(key)/60+"分钟";
     }
 }

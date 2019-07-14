@@ -9,5 +9,7 @@ public class Jwt_Config {
     //令牌的失效时间 单位分钟
     public static final int JETTOKENTIME=30;
 
+    //传递的消息头名称 记录令牌
+    public static  final String HEADERTOKEN="usertoken";
 
 }

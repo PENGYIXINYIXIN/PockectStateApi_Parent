@@ -11,10 +11,11 @@ import java.util.Date;
  *@Date Created in 2019/6/12 16:32
  */
 public class TimeUtil {
+    //获取当前时间到秒
     public static String getTime(){
-
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
+    //获取当前时间到天
     public static String getDate(){
         return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
