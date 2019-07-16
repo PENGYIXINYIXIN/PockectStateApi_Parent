@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
     public R save(UserDto userDto) {
         User user=new User();
         user.setFlag(1);
-
         user.setPhone(userDto.getPhone());
         user.setPassword(EncryptionUtil.AESEnc(Key_Config.PASSKEY,userDto.getPsw()));
         userDao.insert(user);

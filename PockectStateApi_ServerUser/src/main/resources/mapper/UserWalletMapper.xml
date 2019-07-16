@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.api.pockectstateapi_serveruser.dao.UserWalletDao">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.user.UserWallet">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="psbean" jdbcType="INTEGER" property="psbean" />
+    <result column="commmoney" jdbcType="INTEGER" property="commmoney" />
+    <result column="balamoney" jdbcType="INTEGER" property="balamoney" />
+    <result column="no" jdbcType="VARCHAR" property="no" />
+  </resultMap>
+  <insert id="insert" parameterType="com.pockectstate.entity.user.UserWallet">
+    insert into t_userwallet (id, uid, psbean, 
+      commmoney, balamoney, no
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{psbean,jdbcType=INTEGER}, 
+      #{commmoney,jdbcType=INTEGER}, #{balamoney,jdbcType=INTEGER}, #{no,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updatePsbean" >
+    update t_userwallet set psbean=psbean+#{psbean} where uid=#{uid}
+  </update>
+</mapper>

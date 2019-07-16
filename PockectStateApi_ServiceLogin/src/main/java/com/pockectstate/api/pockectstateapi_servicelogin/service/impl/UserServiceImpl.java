@@ -9,6 +9,7 @@ import com.pockectstate.api.common.dto.LoginDto;
 import com.pockectstate.api.common.dto.UserDto;
 import com.pockectstate.api.common.model.JWTToken;
 import com.pockectstate.api.common.util.EncryptionUtil;
+
 import com.pockectstate.api.common.util.IdGenerator;
 import com.pockectstate.api.common.util.JedisUtil;
 import com.pockectstate.api.common.util.Jwt_Util;
@@ -32,10 +33,12 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     @Autowired()
     private  UserDao userDao;
-    @Autowired
+    /*@Autowired
     private JedisUtil jedisUtil;
+   */
+    private JedisUtil jedisUtil = JedisUtil.getInstance();
     @Autowired
-    private IdGenerator idGenerator;
+    private IdGenerator idGenerator ;
     //登陆
     @Override
     public R login(LoginDto loginDto) {
@@ -99,8 +102,6 @@ public class UserServiceImpl implements UserService {
             //删除设备信息
             jedisUtil.del(RedisKey_Config.JWTTOKEN_DEVICE+token);
         }
-
-
         return null;
     }
     //找回密码

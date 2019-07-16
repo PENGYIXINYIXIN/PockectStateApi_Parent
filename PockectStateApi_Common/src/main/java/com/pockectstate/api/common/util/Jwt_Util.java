@@ -1,6 +1,8 @@
 package com.pockectstate.api.common.util;
 
+import com.alibaba.fastjson.JSON;
 import com.pockectstate.api.common.config.Jwt_Config;
+import com.pockectstate.api.common.model.JWTToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -54,6 +56,14 @@ public class Jwt_Util {
         return key;
     }
 
+    //
+    public static JWTToken parseJson(String s ){
+        if(s !=null ){
+            return JSON.parseObject(s,JWTToken.class);
+        }else {
+            return null;
+        }
+    }
 
 
 }

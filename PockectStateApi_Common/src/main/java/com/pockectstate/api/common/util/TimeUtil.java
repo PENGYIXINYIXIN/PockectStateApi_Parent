@@ -11,11 +11,9 @@ import java.util.Date;
  *@Date Created in 2019/6/12 16:32
  */
 public class TimeUtil {
-    //获取当前时间到秒
     public static String getTime(){
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
-    //获取当前时间到天
     public static String getDate(){
         return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
@@ -32,6 +30,9 @@ public class TimeUtil {
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.MONTH,months);
         return calendar.getTime();
+    }
+    public static String getMonth(){
+        return new SimpleDateFormat("yyyy-MM").format(new Date());
     }
     //多少年后
     public static Date getYear(int year){
@@ -50,7 +51,7 @@ public class TimeUtil {
     //计算今天剩余秒
     public static int getLastSeconds(){
         Date currdate=new Date();
-        //获取今天的最后一秒
+        //获取今天的最后一秒s
        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date lastdate=sdf.parse(getDate()+" 23:59:59");
@@ -71,8 +72,16 @@ public class TimeUtil {
         calendar.add(Calendar.DAY_OF_MONTH,-12);
         System.out.println(getDistanceDays(calendar.getTime()));
     }
-
+    public static int getDateDay(Date date){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_YEAR);
+    }
     public static String getFormat(Date date){
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
+ public static String getFormatDay(Date date){
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+
 }

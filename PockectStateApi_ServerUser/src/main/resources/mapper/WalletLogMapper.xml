@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.api.pockectstateapi_serveruser.dao.WalletLogDao">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.user.WalletLog">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="wid" jdbcType="INTEGER" property="wid" />
+    <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.pockectstate.entity.user.WalletLog">
+    insert into t_walletlog (uid, money,info, ctime, type,wid)
+    values (#{uid,jdbcType=INTEGER}, #{money,jdbcType=INTEGER},
+      #{info,jdbcType=VARCHAR}, now(), #{type,jdbcType=TINYINT}, #{wid,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

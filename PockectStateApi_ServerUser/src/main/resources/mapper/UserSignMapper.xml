@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pockectstate.api.pockectstateapi_serveruser.dao.UserSignDao">
+  <resultMap id="BaseResultMap" type="com.pockectstate.entity.user.UserSign">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="days" jdbcType="INTEGER" property="days" />
+    <result column="sdate" jdbcType="TIMESTAMP" property="sdate" />
+    <result column="saward" jdbcType="INTEGER" property="saward" />
+    <result column="sextraaward" jdbcType="INTEGER" property="sextraaward" />
+    <result column="sinfo" jdbcType="VARCHAR" property="sinfo" />
+  </resultMap>
+  <insert id="insert" parameterType="com.pockectstate.entity.user.UserSign" useGeneratedKeys="true" keyColumn="id">
+    insert into t_usersign ( uid, days,sdate, saward, Sextraaward,sinfo)
+    values (#{uid,jdbcType=INTEGER}, #{days,jdbcType=INTEGER},
+      now(), #{saward,jdbcType=INTEGER}, #{sextraaward,jdbcType=INTEGER},
+      #{sinfo,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectByUidDay" resultMap="BaseResultMap">
+    /*查询当前用户最新的一条签到记录*/
+    select * from t_usersign  where uid =#{uid} and date_format(sdate,'%Y-%m-%d') =  #{date} ;
+  </select>
+
+  <select id="selectByUid" resultMap="BaseResultMap">
+    select * from t_usersign where uisd=#{uid} order by sdate desc ;
+  </select>
+  <select id="selectCurrMonth" resultMap="BaseResultMap">
+    select * from t_usersign where uisd=#{uid} and date__format(sade,'%Y-%m') = #{date};
+  </select>
+
+  <select id="selectTj" resultType="com.pockectstate.api.common.dto.SignDto">
+     select max(days) maxSignDays,count(*) sumSignDays,sum(saward+sextraaward) sumSignAward from t_usersign where uid=#{uid} group by uid;
+  </select>
+  <select id="selectMonth" resultType="com.pockectstate.api.common.dto.SignDto">
+       select count(*) from t_usersign where uid=#{uid} and date_format(sdate,'%Y-%m')=date_format(now(),'%Y-%m');
+  </select>
+  <select id="selectByUidLast" resultMap="BaseResultMap">
+    select * from  t_usersign where uid = #{uid} order by sdate desc limit 1;
+  </select>
+</mapper>
