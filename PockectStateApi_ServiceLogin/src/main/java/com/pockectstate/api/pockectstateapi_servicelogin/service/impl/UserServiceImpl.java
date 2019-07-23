@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired()
+    @Autowired(required = false)
     private  UserDao userDao;
     /*@Autowired
     private JedisUtil jedisUtil;
@@ -60,8 +60,9 @@ public class UserServiceImpl implements UserService {
                     jwtToken.setPhone(loginDto.getPhone());
                     jwtToken.setId(user.getId());
                     jwtToken.setNo(idGenerator.nextId()+"");
+                    //JSON对象转换成json格式字符串
                     String jsonToken = JSON.toJSONString(jwtToken);
-                    String token =  Jwt_Util.createJWT(idGenerator.nextId()+"", Jwt_Config.JETTOKENTIME,jsonToken);
+                    String token = Jwt_Util.createJWT(idGenerator.nextId()+"",Jwt_Config.JETTOKENTIME,jsonToken);
                     //存储到redis里面
                     //当前的令牌  值为对应的JwtToken的JSON对象
                     jedisUtil.setExpire(RedisKey_Config.JWTTOKEN_TOKEN+token,jsonToken,Jwt_Config.JETTOKENTIME*60);

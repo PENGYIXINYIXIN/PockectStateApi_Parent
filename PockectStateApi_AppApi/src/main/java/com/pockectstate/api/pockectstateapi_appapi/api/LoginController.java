@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Api(value = "统一鉴权中心" ,tags = "统一鉴权中心")
 @RestController
-public class LoginTroller {
+public class LoginController {
     @Autowired
     private LoginService loginService;
     //登陆

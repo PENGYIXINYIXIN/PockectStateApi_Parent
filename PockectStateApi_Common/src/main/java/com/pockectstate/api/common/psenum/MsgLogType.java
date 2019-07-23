@@ -7,7 +7,7 @@ package com.pockectstate.api.common.psenum;
  *
  */
 public enum  MsgLogType {
-    validatecode(1),getbackpassword(2);
+    validatecode(1),getbackpassword(2),estasklog(3);
     private int index;
 
     public int getIndex() {

@@ -36,6 +36,8 @@
         <option value="$PROJECT_DIR$/PockectStateApi_Eureka/pom.xml" />
         <option value="$PROJECT_DIR$/PockectStateMsg_ServerMsg/pom.xml" />
         <option value="$PROJECT_DIR$/PockectStateApi_ServiceLogin/pom.xml" />
+        <option value="$PROJECT_DIR$/PockectStateApi_ServerGoods/pom.xml" />
+        <option value="$PROJECT_DIR$/PockectStateApi_ServerSerach/pom.xml" />
       </list>
     </option>
   </component>

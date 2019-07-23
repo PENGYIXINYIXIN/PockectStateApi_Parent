@@ -6,15 +6,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="demo" />
         <module name="PockectStateApi_AppApi" />
         <module name="PockectStateApi_Common" />
         <module name="PockectStateApi_Entity" />
         <module name="PockectStateApi_Eureka" />
+        <module name="PockectStateApi_ServerGoods" />
+        <module name="PockectStateApi_ServerSerach" />
         <module name="PockectStateApi_ServerUser" />
         <module name="PockectStateApi_ServiceLogin" />
         <module name="PockectStateMsg_ServerMsg" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="demo" target="1.8" />
+      <module name="PockectStateApi_ServiceGoods" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -22,9 +29,13 @@
       <module name="PockectStateApi_Common" options="-parameters" />
       <module name="PockectStateApi_Entity" options="-parameters" />
       <module name="PockectStateApi_Eureka" options="-parameters" />
+      <module name="PockectStateApi_ServerGoods" options="-parameters" />
+      <module name="PockectStateApi_ServerSerach" options="-parameters" />
       <module name="PockectStateApi_ServerUser" options="-parameters" />
+      <module name="PockectStateApi_ServiceGoods" options="-parameters" />
       <module name="PockectStateApi_ServiceLogin" options="-parameters" />
       <module name="PockectStateMsg_ServerMsg" options="-parameters" />
+      <module name="demo" options="-parameters" />
     </option>
   </component>
 </project>
